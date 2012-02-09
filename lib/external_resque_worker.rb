@@ -20,14 +20,14 @@ class ExternalResqueWorker
   end
   
   def start
-    raise "PEDANTICALLY CODED TO ONLY WORK IN TEST ENV" unless Rails.env.test?
+    raise "PEDANTICALLY CODED TO ONLY WORK IN TEST ENV" if defined?(Rails) && ! Rails.env.test?
     if self.pid = fork
       Process.detach(pid)
       # Since pausing is done by signal USR2, there will be a time between when the worker starts and when we can pause it.
       wait_for_worker_to_start
       pause
     else
-      STDOUT.reopen(File.open("#{Rails.root}/log/external_resque_worker.log", "a+")) # stops it from giving us the extra test output
+      STDOUT.reopen(File.open("#{defined?(Rails) ? Rails.root : "."}/log/external_resque_worker.log", "a+")) # stops it from giving us the extra test output
       start_child
     end
   end
