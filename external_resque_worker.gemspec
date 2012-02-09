@@ -15,11 +15,16 @@ Gem::Specification.new do |s|
   s.summary = %q{Easy way to manage running one or more resque processes during testing}
 
   if s.respond_to? :specification_version then
+    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<resque>, [">= 1.16.1"])
+#       s.add_development_dependency(%q<shoulda>, [">= 2.1.1"])
     else
+      s.add_dependency(%q<resque>, [">= 1.16.1"])
     end
   else
+    s.add_dependency(%q<resque>, [">= 1.16.1"])
   end
 end
