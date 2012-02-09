@@ -1,6 +1,6 @@
 require 'resque'
 class ExternalResqueWorker
-  DEFAULT_STARTUP_TIMEOUT = 1.minute
+  DEFAULT_STARTUP_TIMEOUT = 60
 
   attr_accessor :pid, :startup_timeout
   private_class_method :new
