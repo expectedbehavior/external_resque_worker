@@ -4,6 +4,10 @@ class ExternalResqueWorker
 
   attr_accessor :pid, :startup_timeout
   private_class_method :new
+  
+  class << self
+    attr_accessor :resque_work_command
+  end
 
   # It's very difficult to ensure a worker is paused before it works any jobs if jobs exist before the worker is created. Run this before actually having jobs enqueued if you don't want them to run at first.
   def self.create_and_pause_shortly_thereafter(queues_to_watch = '*')
@@ -78,7 +82,8 @@ class ExternalResqueWorker
     # child process of test.
     # If it's not the direct child process then the PID returned from fork() is
     # wrong, which means we can't communicate with the worker.
-    exec('bundle', 'exec', 'rake', "--silent", 'environment', 'resque:work', "QUEUE=#{@queues.join(',')}", "INTERVAL=0.25", "RAILS_ENV=test", "VVERBOSE=1")
+    raise "No resque_work_command defined, define using ExternalResqueWorker.resque_work_command=" unless ExternalResqueWorker.resque_work_command
+    exec("#{ExternalResqueWorker.resque_work_command} QUEUE=#{@queues.join(',')} INTERVAL=0.25 RAILS_ENV=test VVERBOSE=1")
   end
 
   def wait_for_worker_to_start
