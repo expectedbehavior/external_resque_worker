@@ -1,3 +1,4 @@
+require 'resque'
 class ExternalResqueWorker
   DEFAULT_STARTUP_TIMEOUT = 1.minute
 
