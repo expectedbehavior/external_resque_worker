@@ -92,6 +92,6 @@ class ExternalResqueWorker
   end
 
   def worker_started?
-    Resque.workers.any? { |worker| worker.pid == self.pid }
+    Resque.workers.any? { |worker| worker.worker_pids.include? self.pid.to_s }
   end
 end
